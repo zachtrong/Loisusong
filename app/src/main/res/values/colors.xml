@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffc107</color>
+    <color name="colorPrimaryDark">#FFA000</color>
+    <color name="colorAccent">#00897B</color>
+    <color name="colorControlNormal">#FFFFFF</color>
+    <color name="backgroundLight">#f0f0f0</color> <!--#262626</color>-->
+    <color name="backgroundDark">#262626</color>
+    <color name="textColorDark">#212121</color>
+    <color name="imgHolder">#CCCCCC</color>
+    <color name="background">#f0f0f0</color><!--#3d3d3d</color>-->
+    <color name="backgroundGrey">#3d3d3d</color>
+    <color name="splash_status_bar_color">#00000000</color>
+</resources>
