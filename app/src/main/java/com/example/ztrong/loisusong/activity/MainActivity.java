@@ -14,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ztrong.loisusong.R;
+import com.example.ztrong.loisusong.fragment.AboutFragment;
+import com.example.ztrong.loisusong.fragment.CoffeeFragment;
 import com.example.ztrong.loisusong.fragment.HomeFragment;
+import com.example.ztrong.loisusong.fragment.LibraryFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,6 +84,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		switch (id) {
 			case R.id.nav_home:
 				return new HomeFragment();
+			case R.id.nav_lib:
+				return new LibraryFragment();
+			case R.id.nav_cafe:
+				return new CoffeeFragment();
+			case R.id.nav_about:
+				return new AboutFragment();
 			default:
 				return new HomeFragment();
 		}
