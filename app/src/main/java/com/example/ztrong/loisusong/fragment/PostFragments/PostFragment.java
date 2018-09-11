@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.ztrong.loisusong.R;
 import com.example.ztrong.loisusong.adapter.PostsRecyclerAdapter;
 import com.example.ztrong.loisusong.service.constant.Constant;
+import com.example.ztrong.loisusong.service.network.Network;
 import com.example.ztrong.loisusong.service.utils.realm.RealmConfigs;
 
 import java.util.Objects;
@@ -22,13 +24,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public abstract class PostFragment extends Fragment {
+public abstract class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 	@BindView(R.id.rv_home)
 	RecyclerView recyclerView;
+	@BindView(R.id.srl_home)
+	SwipeRefreshLayout swipeRefreshLayout;
 
 	private Realm realm;
-	private PostsRecyclerAdapter postsRecyclerAdapter;
+	private PostsRecyclerAdapter postsRecyclerAdapter = new PostsRecyclerAdapter();
 	private String typePost;
 	protected RecyclerView.LayoutManager layoutManager;
 
@@ -47,14 +51,13 @@ public abstract class PostFragment extends Fragment {
 
 	protected void setUpDatabase(String typePost) {
 		this.typePost = typePost;
-		realm = Realm.getInstance(RealmConfigs.getConfig(typePost));
+		realm = Realm.getDefaultInstance();
 		postsRecyclerAdapter.setDatabase(realm);
 	}
 
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		Realm.init(Objects.requireNonNull(getContext()));
 	}
 
 	@Nullable
@@ -66,8 +69,18 @@ public abstract class PostFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		setUpLayout(view);
+		onRefresh();
+	}
+
+	private void setUpLayout(View view) {
 		ButterKnife.bind(this, view);
 		layoutManager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(layoutManager);
+		swipeRefreshLayout.setOnRefreshListener(this);
+	}
+
+	@Override
+	public void onRefresh() {
 	}
 }

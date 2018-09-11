@@ -10,5 +10,5 @@
     <color name="imgHolder">#CCCCCC</color>
     <color name="background">#f0f0f0</color><!--#3d3d3d</color>-->
     <color name="backgroundGrey">#3d3d3d</color>
-    <color name="splash_status_bar_color">#00000000</color>
+    <color name="transparent">#00000000</color>
 </resources>

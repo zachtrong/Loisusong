@@ -1,16 +1,14 @@
 package com.example.ztrong.loisusong.activity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +21,15 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+	private static final int DELAY_FRAGMENT_MS = 500;
+
 	@BindView(R.id.drawer_layout)
 	DrawerLayout drawerLayout;
 	@BindView(R.id.nv_main)
 	NavigationView navigationView;
 
 	android.support.v4.app.FragmentManager fragmentManager;
+	private boolean isFirstStart = true;
 
 	public static void open(Context context) {
 		context.startActivity(new Intent(context, MainActivity.class));
@@ -88,15 +89,31 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 		Fragment fragment = getFragmentFromMenuItem(item);
-		startFragment(fragment);
+		if (isFirstStart) {
+			isFirstStart = false;
+			startFragmentInstant(fragment);
+		} else {
+			startFragmentDelayed(fragment);
+		}
 		closeDrawer();
 		return false;
 	}
 
-	private void startFragment(Fragment fragment) {
+	private void startFragmentInstant(Fragment fragment) {
+		replayFragment(fragment);
+	}
+
+	private void replayFragment(Fragment fragment) {
 		fragmentManager.beginTransaction()
 				.replace(R.id.fl_main_content, fragment)
 				.commit();
+	}
+
+	private void startFragmentDelayed(Fragment fragment) {
+		final Handler handler = new Handler();
+		handler.postDelayed(() -> {
+			replayFragment(fragment);
+		}, DELAY_FRAGMENT_MS);
 	}
 
 	private void closeDrawer() {
