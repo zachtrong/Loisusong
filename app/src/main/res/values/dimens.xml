@@ -6,4 +6,6 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="nav_status_bar_height">24dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="post_margin">20dp</dimen>
 </resources>

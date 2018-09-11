@@ -15,16 +15,16 @@ import android.view.ViewGroup;
 import com.example.ztrong.loisusong.R;
 import com.example.ztrong.loisusong.adapter.PostsRecyclerAdapter;
 import com.example.ztrong.loisusong.service.constant.Constant;
+import com.example.ztrong.loisusong.service.interfaces.PostNetworkStatus;
 import com.example.ztrong.loisusong.service.network.Network;
-import com.example.ztrong.loisusong.service.utils.realm.RealmConfigs;
-
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public abstract class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public abstract class PostFragment extends Fragment
+		implements SwipeRefreshLayout.OnRefreshListener,
+		PostNetworkStatus {
 
 	@BindView(R.id.rv_home)
 	RecyclerView recyclerView;
@@ -34,6 +34,7 @@ public abstract class PostFragment extends Fragment implements SwipeRefreshLayou
 	private Realm realm;
 	private PostsRecyclerAdapter postsRecyclerAdapter = new PostsRecyclerAdapter();
 	private String typePost;
+	private Network network;
 	protected RecyclerView.LayoutManager layoutManager;
 
 	public static Fragment newInstance(String type) {
@@ -70,6 +71,7 @@ public abstract class PostFragment extends Fragment implements SwipeRefreshLayou
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		setUpLayout(view);
+		setUpNetwork();
 		onRefresh();
 	}
 
@@ -77,10 +79,33 @@ public abstract class PostFragment extends Fragment implements SwipeRefreshLayou
 		ButterKnife.bind(this, view);
 		layoutManager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(postsRecyclerAdapter);
 		swipeRefreshLayout.setOnRefreshListener(this);
+	}
+
+	private void setUpNetwork() {
+		network = new Network(realm);
+		network.addListener(this);
 	}
 
 	@Override
 	public void onRefresh() {
+		swipeRefreshLayout.setRefreshing(true);
+		network.downloadPosts(Constant.POST_ALL, 1);
+	}
+
+	@Override
+	public void onPosts() {
+		swipeRefreshLayout.setRefreshing(false);
+	}
+
+	@Override
+	public void onEmpty() {
+
+	}
+
+	@Override
+	public void onError() {
+
 	}
 }
