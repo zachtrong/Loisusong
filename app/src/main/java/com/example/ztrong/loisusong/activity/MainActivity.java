@@ -21,6 +21,7 @@ import com.example.ztrong.loisusong.fragment.LibraryFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 

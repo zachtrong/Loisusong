@@ -21,6 +21,7 @@ import com.example.ztrong.loisusong.service.network.Network;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public abstract class PostFragment extends Fragment
 		implements SwipeRefreshLayout.OnRefreshListener,
@@ -30,6 +31,8 @@ public abstract class PostFragment extends Fragment
 	RecyclerView recyclerView;
 	@BindView(R.id.srl_home)
 	SwipeRefreshLayout swipeRefreshLayout;
+	@BindView(R.id.shimmer_layout)
+	ShimmerLayout shimmerLayout;
 
 	private Realm realm;
 	private PostsRecyclerAdapter postsRecyclerAdapter = new PostsRecyclerAdapter();
@@ -72,7 +75,7 @@ public abstract class PostFragment extends Fragment
 		super.onViewCreated(view, savedInstanceState);
 		setUpLayout(view);
 		setUpNetwork();
-		onRefresh();
+		setUpFirstLaunch();
 	}
 
 	private void setUpLayout(View view) {
@@ -88,15 +91,23 @@ public abstract class PostFragment extends Fragment
 		network.addListener(this);
 	}
 
+	private void setUpFirstLaunch() {
+		shimmerLayout.startShimmerAnimation();
+		onRefresh();
+	}
+
 	@Override
 	public void onRefresh() {
-		swipeRefreshLayout.setRefreshing(true);
 		network.downloadPosts(Constant.POST_ALL, 1);
 	}
 
 	@Override
 	public void onPosts() {
 		swipeRefreshLayout.setRefreshing(false);
+		if (shimmerLayout.getVisibility() != View.GONE) {
+			shimmerLayout.stopShimmerAnimation();
+			shimmerLayout.setVisibility(View.GONE);
+		}
 	}
 
 	@Override

@@ -14,7 +14,9 @@ import com.example.ztrong.loisusong.R;
 import com.example.ztrong.loisusong.service.model.PostsChild.SizeType;
 import com.example.ztrong.loisusong.service.model.PostsChild.Sizes;
 import com.example.ztrong.loisusong.service.model.PostsModel;
+import com.example.ztrong.loisusong.service.utils.image.BitmapTransform;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
