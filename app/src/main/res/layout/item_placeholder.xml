@@ -8,23 +8,23 @@
     <View
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="@dimen/item_placeholder_image_height"
         android:background="@color/placeHolderBG"
         />
     <View
         android:id="@+id/des"
         app:layout_constraintTop_toBottomOf="@id/image"
-        android:layout_marginTop="@dimen/post_margin"
+        android:layout_marginTop="@dimen/post_space"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="40dp"
         android:background="@color/placeHolderBG"
         />
 
     <View
         android:id="@+id/date"
         app:layout_constraintTop_toBottomOf="@id/des"
-        android:layout_marginTop="@dimen/post_margin"
-        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/post_space"
+        android:layout_width="70dp"
         android:layout_height="20dp"
         android:background="@color/placeHolderBG"
         />

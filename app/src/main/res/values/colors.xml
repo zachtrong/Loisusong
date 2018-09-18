@@ -13,4 +13,5 @@
     <color name="transparent">#00000000</color>
 
     <color name="placeHolderBG">#dddddd</color>
+    <color name="date">#949494</color>
 </resources>
