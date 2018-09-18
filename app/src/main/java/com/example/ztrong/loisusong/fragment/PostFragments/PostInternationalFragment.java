@@ -9,9 +9,21 @@ import android.view.View;
 import com.example.ztrong.loisusong.service.constant.Constant;
 
 public class PostInternationalFragment extends PostFragment {
+
+	private static boolean isFirstLaunch = true;
+
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		setUpDatabase(Constant.POST_INTERNATIONAL);
+	}
+
+	@Override
+	boolean isFirstLaunch() {
+		if (isFirstLaunch) {
+			isFirstLaunch = false;
+			return true;
+		}
+		return false;
 	}
 }

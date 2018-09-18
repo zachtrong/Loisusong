@@ -17,10 +17,12 @@ import com.example.ztrong.loisusong.adapter.PostsRecyclerAdapter;
 import com.example.ztrong.loisusong.service.constant.Constant;
 import com.example.ztrong.loisusong.service.interfaces.PostNetworkStatus;
 import com.example.ztrong.loisusong.service.network.Network;
+import com.example.ztrong.loisusong.service.utils.realm.RealmConfigs;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public abstract class PostFragment extends Fragment
@@ -39,6 +41,7 @@ public abstract class PostFragment extends Fragment
 	private String typePost;
 	private Network network;
 	protected RecyclerView.LayoutManager layoutManager;
+	private boolean isRefresh = false;
 
 	public static Fragment newInstance(String type) {
 		switch (type) {
@@ -55,13 +58,30 @@ public abstract class PostFragment extends Fragment
 
 	protected void setUpDatabase(String typePost) {
 		this.typePost = typePost;
-		realm = Realm.getDefaultInstance();
+		setUpRealm();
 		postsRecyclerAdapter.setDatabase(realm);
+	}
+
+	// Each fragment has its own realm for pagination
+	private void setUpRealm() {
+		RealmConfiguration realmConfiguration = RealmConfigs.getConfig(typePost);
+		realm = Realm.getInstance(realmConfiguration);
 	}
 
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setUpNetwork();
+	}
+
+	private void setUpNetwork() {
+		network = new Network(realm);
+		network.addListener(this);
 	}
 
 	@Nullable
@@ -74,8 +94,11 @@ public abstract class PostFragment extends Fragment
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		setUpLayout(view);
-		setUpNetwork();
-		setUpFirstLaunch();
+		if (isFirstLaunch()) {
+			setUpFirstLaunch();
+		} else {
+			setUpNormalLaunch();
+		}
 	}
 
 	private void setUpLayout(View view) {
@@ -86,10 +109,7 @@ public abstract class PostFragment extends Fragment
 		swipeRefreshLayout.setOnRefreshListener(this);
 	}
 
-	private void setUpNetwork() {
-		network = new Network(realm);
-		network.addListener(this);
-	}
+	abstract boolean isFirstLaunch();
 
 	private void setUpFirstLaunch() {
 		shimmerLayout.startShimmerAnimation();
@@ -98,11 +118,12 @@ public abstract class PostFragment extends Fragment
 
 	@Override
 	public void onRefresh() {
-		network.downloadPosts(Constant.POST_ALL, 1);
+		isRefresh = true;
+		network.getNewPosts(Constant.POST_ALL);
 	}
 
-	@Override
-	public void onPosts() {
+	private void onListenerNetworkPost() {
+		isRefresh = false;
 		swipeRefreshLayout.setRefreshing(false);
 		if (shimmerLayout.getVisibility() != View.GONE) {
 			shimmerLayout.stopShimmerAnimation();
@@ -110,13 +131,28 @@ public abstract class PostFragment extends Fragment
 		}
 	}
 
+	private void setUpNormalLaunch() {
+		shimmerLayout.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void onPosts() {
+		onListenerNetworkPost();
+	}
+
 	@Override
 	public void onEmpty() {
-
+		onListenerNetworkPost();
 	}
 
 	@Override
 	public void onError() {
+		onListenerNetworkPost();
+	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		network.removeListener(this);
 	}
 }

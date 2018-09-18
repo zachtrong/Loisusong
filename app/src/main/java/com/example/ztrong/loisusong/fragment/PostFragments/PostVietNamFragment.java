@@ -10,9 +10,20 @@ import android.view.View;
 import com.example.ztrong.loisusong.service.constant.Constant;
 
 public class PostVietNamFragment extends PostFragment {
+	private static boolean isFirstLaunch = true;
+
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		setUpDatabase(Constant.POST_VIETNAM);
+	}
+
+	@Override
+	boolean isFirstLaunch() {
+		if (isFirstLaunch) {
+			isFirstLaunch = false;
+			return true;
+		}
+		return false;
 	}
 }
