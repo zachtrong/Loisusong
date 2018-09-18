@@ -15,7 +15,11 @@ public class PostInternationalFragment extends PostFragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		setUpDatabase(Constant.POST_INTERNATIONAL);
+	}
+
+	@Override
+	void initTypePost() {
+		setTypePost(Constant.POST_INTERNATIONAL);
 	}
 
 	@Override

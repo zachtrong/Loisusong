@@ -16,8 +16,10 @@ import com.example.ztrong.loisusong.R;
 import com.example.ztrong.loisusong.adapter.PostsRecyclerAdapter;
 import com.example.ztrong.loisusong.service.constant.Constant;
 import com.example.ztrong.loisusong.service.interfaces.PostNetworkStatus;
+import com.example.ztrong.loisusong.service.interfaces.RequestMorePosts;
 import com.example.ztrong.loisusong.service.network.Network;
 import com.example.ztrong.loisusong.service.utils.realm.RealmConfigs;
+import com.orhanobut.hawk.Hawk;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +29,9 @@ import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public abstract class PostFragment extends Fragment
 		implements SwipeRefreshLayout.OnRefreshListener,
-		PostNetworkStatus {
+		PostNetworkStatus, RequestMorePosts {
+
+	public static final int POST_OVER = -1;
 
 	@BindView(R.id.rv_home)
 	RecyclerView recyclerView;
@@ -37,11 +41,12 @@ public abstract class PostFragment extends Fragment
 	ShimmerLayout shimmerLayout;
 
 	private Realm realm;
-	private PostsRecyclerAdapter postsRecyclerAdapter = new PostsRecyclerAdapter();
+	private PostsRecyclerAdapter postsRecyclerAdapter;
 	private String typePost;
 	private Network network;
 	protected RecyclerView.LayoutManager layoutManager;
-	private boolean isRefresh = false;
+	private boolean isLoading = false;
+	private int pageLoading;
 
 	public static Fragment newInstance(String type) {
 		switch (type) {
@@ -56,21 +61,19 @@ public abstract class PostFragment extends Fragment
 		}
 	}
 
-	protected void setUpDatabase(String typePost) {
-		this.typePost = typePost;
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		initTypePost();
 		setUpRealm();
-		postsRecyclerAdapter.setDatabase(realm);
 	}
+
+	abstract void initTypePost();
 
 	// Each fragment has its own realm for pagination
 	private void setUpRealm() {
 		RealmConfiguration realmConfiguration = RealmConfigs.getConfig(typePost);
 		realm = Realm.getInstance(realmConfiguration);
-	}
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
 	}
 
 	@Override
@@ -105,6 +108,7 @@ public abstract class PostFragment extends Fragment
 		ButterKnife.bind(this, view);
 		layoutManager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(layoutManager);
+		postsRecyclerAdapter = new PostsRecyclerAdapter(this);
 		recyclerView.setAdapter(postsRecyclerAdapter);
 		swipeRefreshLayout.setOnRefreshListener(this);
 	}
@@ -118,12 +122,17 @@ public abstract class PostFragment extends Fragment
 
 	@Override
 	public void onRefresh() {
-		isRefresh = true;
-		network.getNewPosts(Constant.POST_ALL);
+		if (!isLoading) {
+			isLoading = true;
+			pageLoading = getLastPageLoaded();
+			network.getNewPosts(Constant.POST_ALL);
+		} else {
+			swipeRefreshLayout.setRefreshing(false);
+		}
 	}
 
 	private void onListenerNetworkPost() {
-		isRefresh = false;
+		isLoading = false;
 		swipeRefreshLayout.setRefreshing(false);
 		if (shimmerLayout.getVisibility() != View.GONE) {
 			shimmerLayout.stopShimmerAnimation();
@@ -136,13 +145,21 @@ public abstract class PostFragment extends Fragment
 	}
 
 	@Override
+	public void onNewPosts() {
+		onListenerNetworkPost();
+		saveLoadedPage(pageLoading);
+	}
+
+	@Override
 	public void onPosts() {
 		onListenerNetworkPost();
+		saveLoadedPage(pageLoading);
 	}
 
 	@Override
 	public void onEmpty() {
 		onListenerNetworkPost();
+		saveLoadedPage(POST_OVER);
 	}
 
 	@Override
@@ -151,8 +168,47 @@ public abstract class PostFragment extends Fragment
 	}
 
 	@Override
+	public void onRequestMorePosts() {
+		if (!isLoading) {
+			int lastPage = getLastPageLoaded();
+			if (lastPage == POST_OVER) {
+				removeLoadingView();
+			} else {
+				isLoading = true;
+				pageLoading = lastPage + 1;
+				network.getPosts(typePost, pageLoading);
+			}
+		}
+	}
+
+	private void removeLoadingView() {
+		int recyclerSize = layoutManager.getItemCount();
+		if (recyclerSize > 0) {
+			layoutManager
+					.getChildAt(recyclerSize - 1)
+					.setVisibility(View.GONE);
+		}
+	}
+
+	private void saveLoadedPage(int page) {
+		Hawk.put(typePost, page);
+	}
+
+	private int getLastPageLoaded() {
+		return Hawk.get(typePost, 1);
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		network.removeListener(this);
+	}
+
+	public Realm getRealm() {
+		return realm;
+	}
+
+	protected void setTypePost(String typePost) {
+		this.typePost = typePost;
 	}
 }

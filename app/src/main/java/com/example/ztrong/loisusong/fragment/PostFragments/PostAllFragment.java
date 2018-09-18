@@ -10,7 +10,11 @@ public class PostAllFragment extends PostFragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		super.setUpDatabase(Constant.POST_ALL);
+	}
+
+	@Override
+	void initTypePost() {
+		setTypePost(Constant.POST_ALL);
 	}
 
 	@Override

@@ -20,7 +20,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Network {
-	private boolean isLoading = false;
 	private Gson gson;
 	private Realm realm;
 	private OkHttpClient.Builder httpClientBuilder;
@@ -40,23 +39,24 @@ public class Network {
 	}
 
 	public void getPosts(String typePost, int page) {
-		if (!isLoading) {
-			isLoading = true;
-			PostApi postApi = new Retrofit.Builder()
-					.baseUrl(Constant.REST_SERVER)
-					.addConverterFactory(GsonConverterFactory.create(gson))
-					.callFactory(httpClientBuilder.build())
-					.build()
-					.create(PostApi.class);
+		PostApi postApi = new Retrofit.Builder()
+				.baseUrl(Constant.REST_SERVER)
+				.addConverterFactory(GsonConverterFactory.create(gson))
+				.callFactory(httpClientBuilder.build())
+				.build()
+				.create(PostApi.class);
 
-			postApi.getPosts(page, PostTag.getTag(typePost), PostCategory.getCategory(typePost))
-					.enqueue(getPostsCallback);
+		postApi.getPosts(page, PostTag.getTag(typePost), PostCategory.getCategory(typePost))
+				.enqueue(new NetworkGetCallback(this));
+	}
+
+	protected void notifyNewPosts() {
+		for (PostNetworkStatus listener : listeners) {
+			listener.onNewPosts();
 		}
 	}
 
-	private Callback getPostsCallback = new NetworkGetCallback(this);
-
-	protected void notifySuccess() {
+	protected void notifyPosts() {
 		for (PostNetworkStatus listener : listeners) {
 			listener.onPosts();
 		}
@@ -83,13 +83,7 @@ public class Network {
 				.create(PostApi.class);
 
 		postApi.getPosts(1, PostTag.getTag(typePost), PostCategory.getCategory(typePost))
-				.enqueue(getNewPostsCallback);
-	}
-
-	private Callback getNewPostsCallback = new NetworkGetNewCallback(this);
-
-	protected void setLoading(boolean isLoading) {
-		this.isLoading = isLoading;
+				.enqueue(new NetworkGetNewCallback(this));
 	}
 
 	public void addListener(PostNetworkStatus listener) {

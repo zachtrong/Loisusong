@@ -15,7 +15,11 @@ public class PostVietNamFragment extends PostFragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		setUpDatabase(Constant.POST_VIETNAM);
+	}
+
+	@Override
+	void initTypePost() {
+		setTypePost(Constant.POST_VIETNAM);
 	}
 
 	@Override

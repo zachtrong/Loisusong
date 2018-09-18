@@ -11,27 +11,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ztrong.loisusong.R;
-import com.example.ztrong.loisusong.service.model.PostsChild.SizeType;
-import com.example.ztrong.loisusong.service.model.PostsChild.Sizes;
+import com.example.ztrong.loisusong.fragment.PostFragments.PostFragment;
+import com.example.ztrong.loisusong.service.interfaces.RequestMorePosts;
 import com.example.ztrong.loisusong.service.model.PostsModel;
-import com.example.ztrong.loisusong.service.utils.image.BitmapTransform;
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
-import butterknife.BindView;
 import io.realm.Realm;
-import io.realm.RealmModel;
 import io.realm.RealmResults;
 
 public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 
+	private static final int VIEW_POST = 0;
+	private static final int VIEW_LOADING = 1;
+
+	private RequestMorePosts requestMorePostsListener;
 	private Realm realm;
 	private RealmResults<PostsModel> postsModels;
 
-	public void setDatabase(Realm realm) {
-		this.realm = realm;
+	public PostsRecyclerAdapter(PostFragment postFragment) {
+		this.requestMorePostsListener = postFragment;
+		realm = postFragment.getRealm();
 		postsModels = realm.where(PostsModel.class)
 				.findAll();
 	}
@@ -39,23 +38,43 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 	@NonNull
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		View v = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.item_post, parent, false);
-		return new ViewPostHolder(v);
+		View v;
+		if (viewType == VIEW_POST) {
+			v = LayoutInflater.from(parent.getContext())
+					.inflate(R.layout.item_post, parent, false);
+			return new ViewPostHolder(v);
+		} else if (viewType == VIEW_LOADING) {
+			v = LayoutInflater.from(parent.getContext())
+							.inflate(R.layout.progressbar, parent, false);
+			return new ViewLoadingHolder(v);
+		} else {
+			throw new Error("No such ViewType Holder");
+		}
 	}
 
 	@Override
 	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 		if (holder instanceof ViewPostHolder) {
 			((ViewPostHolder) holder).setPost(postsModels.get(position));
+		} else if (holder instanceof ViewLoadingHolder) {
+			((ViewLoadingHolder) holder).loadPosts();
 		} else {
-			// TODO ((ViewLoadingHolder) holder);
+			throw new Error("No such view to bind");
+		}
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		if (position < postsModels.size()) {
+			return VIEW_POST;
+		} else {
+			return VIEW_LOADING;
 		}
 	}
 
 	@Override
 	public int getItemCount() {
-		return postsModels.size();
+		return postsModels.size() + 1;
 	}
 
 	public class ViewPostHolder extends RecyclerView.ViewHolder {
@@ -63,14 +82,14 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 		TextView titleTextView;
 		TextView dateTextView;
 
-		public ViewPostHolder(View itemView) {
+		ViewPostHolder(View itemView) {
 			super(itemView);
 			imageView = itemView.findViewById(R.id.iv_item);
 			titleTextView = itemView.findViewById(R.id.tv_title);
 			dateTextView = itemView.findViewById(R.id.tv_date);
 		}
 
-		public void setPost(PostsModel postsModel) {
+		private void setPost(PostsModel postsModel) {
 			Picasso.get()
 					.load(getBestSizeType(postsModel))
 					.into(imageView);
@@ -89,9 +108,13 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 	public class ViewLoadingHolder extends RecyclerView.ViewHolder {
 		ProgressBar progressBar;
 
-		public ViewLoadingHolder(View itemView) {
+		ViewLoadingHolder(View itemView) {
 			super(itemView);
 			progressBar = itemView.findViewById(R.id.progress_bar);
+		}
+
+		private void loadPosts() {
+			requestMorePostsListener.onRequestMorePosts();
 		}
 	}
 }
