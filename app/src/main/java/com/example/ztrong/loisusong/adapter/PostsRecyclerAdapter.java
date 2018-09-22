@@ -105,6 +105,7 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 		private void setPost(PostsModel postsModel) {
 			Picasso.get()
 					.load(getBestSizeType(postsModel))
+					.placeholder(R.drawable.image_placeholder)
 					.into(imageView);
 
 			titleTextView.setText(Html.fromHtml(postsModel.title.rendered));

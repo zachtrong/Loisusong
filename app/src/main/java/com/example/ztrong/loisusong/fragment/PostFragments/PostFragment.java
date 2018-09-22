@@ -1,11 +1,9 @@
 package com.example.ztrong.loisusong.fragment.PostFragments;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +16,6 @@ import com.example.ztrong.loisusong.R;
 import com.example.ztrong.loisusong.adapter.PostsRecyclerAdapter;
 import com.example.ztrong.loisusong.service.constant.Constant;
 import com.example.ztrong.loisusong.service.interfaces.PostNetworkStatus;
-import com.example.ztrong.loisusong.service.interfaces.RequestMorePosts;
 import com.example.ztrong.loisusong.service.network.Network;
 import com.example.ztrong.loisusong.service.utils.realm.RealmConfigs;
 import com.orhanobut.hawk.Hawk;
@@ -35,9 +32,9 @@ public abstract class PostFragment extends Fragment
 
 	public static final int POST_OVER = -1;
 
-	@BindView(R.id.rv_home)
+	@BindView(R.id.rv)
 	RecyclerView recyclerView;
-	@BindView(R.id.srl_home)
+	@BindView(R.id.srl)
 	SwipeRefreshLayout swipeRefreshLayout;
 	@BindView(R.id.shimmer_layout)
 	ShimmerLayout shimmerLayout;
@@ -58,6 +55,10 @@ public abstract class PostFragment extends Fragment
 				return new PostVietNamFragment();
 			case Constant.POST_INTERNATIONAL:
 				return new PostInternationalFragment();
+			case Constant.POST_MEDIA:
+				return new PostMediaFragment();
+			case Constant.POST_ABOUT_US:
+				return new PostAboutFragment();
 			default:
 				throw new Error("No Such Fragment");
 		}
@@ -92,7 +93,7 @@ public abstract class PostFragment extends Fragment
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_posts_home, container, false);
+		return inflater.inflate(R.layout.fragment_posts, container, false);
 	}
 
 	@Override
