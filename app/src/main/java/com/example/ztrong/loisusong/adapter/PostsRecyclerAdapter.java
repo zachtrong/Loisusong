@@ -24,12 +24,11 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 	private static final int VIEW_POST = 0;
 	private static final int VIEW_LOADING = 1;
 
-	private RequestMorePosts requestMorePostsListener;
 	private Realm realm;
 	private RealmResults<PostsModel> postsModels;
+	private boolean isLoadingView = true;
 
 	public PostsRecyclerAdapter(PostFragment postFragment) {
-		this.requestMorePostsListener = postFragment;
 		realm = postFragment.getRealm();
 		postsModels = realm.where(PostsModel.class)
 				.findAll();
@@ -57,7 +56,7 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 		if (holder instanceof ViewPostHolder) {
 			((ViewPostHolder) holder).setPost(postsModels.get(position));
 		} else if (holder instanceof ViewLoadingHolder) {
-			((ViewLoadingHolder) holder).loadPosts();
+
 		} else {
 			throw new Error("No such view to bind");
 		}
@@ -74,7 +73,21 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 
 	@Override
 	public int getItemCount() {
-		return postsModels.size() + 1;
+		return postsModels.size() + (isLoadingView ? 1 : 0);
+	}
+
+	public void removeLoadingView() {
+		if (isLoadingView) {
+			notifyItemRemoved(getItemCount() - 1);
+			isLoadingView = false;
+		}
+	}
+
+	public void recoverLoadingView() {
+		if (!isLoadingView) {
+			isLoadingView = true;
+			notifyItemChanged(getItemCount());
+		}
 	}
 
 	public class ViewPostHolder extends RecyclerView.ViewHolder {
@@ -111,10 +124,6 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter {
 		ViewLoadingHolder(View itemView) {
 			super(itemView);
 			progressBar = itemView.findViewById(R.id.progress_bar);
-		}
-
-		private void loadPosts() {
-			requestMorePostsListener.onRequestMorePosts();
 		}
 	}
 }

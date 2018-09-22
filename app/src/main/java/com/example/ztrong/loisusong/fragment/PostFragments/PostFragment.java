@@ -1,9 +1,11 @@
 package com.example.ztrong.loisusong.fragment.PostFragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +31,7 @@ import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public abstract class PostFragment extends Fragment
 		implements SwipeRefreshLayout.OnRefreshListener,
-		PostNetworkStatus, RequestMorePosts {
+		PostNetworkStatus {
 
 	public static final int POST_OVER = -1;
 
@@ -44,7 +46,7 @@ public abstract class PostFragment extends Fragment
 	private PostsRecyclerAdapter postsRecyclerAdapter;
 	private String typePost;
 	private Network network;
-	protected RecyclerView.LayoutManager layoutManager;
+	protected LinearLayoutManager layoutManager;
 	private boolean isLoading = false;
 	private int pageLoading;
 
@@ -110,6 +112,7 @@ public abstract class PostFragment extends Fragment
 		recyclerView.setLayoutManager(layoutManager);
 		postsRecyclerAdapter = new PostsRecyclerAdapter(this);
 		recyclerView.setAdapter(postsRecyclerAdapter);
+		recyclerView.addOnScrollListener(onScrollListener);
 		swipeRefreshLayout.setOnRefreshListener(this);
 	}
 
@@ -125,7 +128,7 @@ public abstract class PostFragment extends Fragment
 		if (!isLoading) {
 			isLoading = true;
 			pageLoading = getLastPageLoaded();
-			network.getNewPosts(Constant.POST_ALL);
+			network.getNewPosts(typePost);
 		} else {
 			swipeRefreshLayout.setRefreshing(false);
 		}
@@ -146,12 +149,15 @@ public abstract class PostFragment extends Fragment
 
 	@Override
 	public void onNewPosts() {
+		postsRecyclerAdapter.notifyDataSetChanged();
+		postsRecyclerAdapter.recoverLoadingView();
 		onListenerNetworkPost();
-		saveLoadedPage(pageLoading);
+		saveLoadedPage(1);
 	}
 
 	@Override
 	public void onPosts() {
+		postsRecyclerAdapter.notifyDataSetChanged();
 		onListenerNetworkPost();
 		saveLoadedPage(pageLoading);
 	}
@@ -160,6 +166,7 @@ public abstract class PostFragment extends Fragment
 	public void onEmpty() {
 		onListenerNetworkPost();
 		saveLoadedPage(POST_OVER);
+		postsRecyclerAdapter.removeLoadingView();
 	}
 
 	@Override
@@ -167,28 +174,37 @@ public abstract class PostFragment extends Fragment
 		onListenerNetworkPost();
 	}
 
-	@Override
-	public void onRequestMorePosts() {
-		if (!isLoading) {
-			int lastPage = getLastPageLoaded();
-			if (lastPage == POST_OVER) {
-				removeLoadingView();
-			} else {
-				isLoading = true;
-				pageLoading = lastPage + 1;
-				network.getPosts(typePost, pageLoading);
+	private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+		@Override
+		public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+			super.onScrollStateChanged(recyclerView, newState);
+		}
+
+		@Override
+		public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+			super.onScrolled(recyclerView, dx, dy);
+			if (isScrolledLastPost()) {
+				onRequestMorePosts();
 			}
 		}
-	}
 
-	private void removeLoadingView() {
-		int recyclerSize = layoutManager.getItemCount();
-		if (recyclerSize > 0) {
-			layoutManager
-					.getChildAt(recyclerSize - 1)
-					.setVisibility(View.GONE);
+		private boolean isScrolledLastPost() {
+			return layoutManager.findLastVisibleItemPosition() + 1 == postsRecyclerAdapter.getItemCount();
 		}
-	}
+
+		private void onRequestMorePosts() {
+			if (!isLoading) {
+				int lastPage = getLastPageLoaded();
+				if (lastPage == POST_OVER) {
+					postsRecyclerAdapter.removeLoadingView();
+				} else {
+					isLoading = true;
+					pageLoading = lastPage + 1;
+					network.getPosts(typePost, pageLoading);
+				}
+			}
+		}
+	};
 
 	private void saveLoadedPage(int page) {
 		Hawk.put(typePost, page);
