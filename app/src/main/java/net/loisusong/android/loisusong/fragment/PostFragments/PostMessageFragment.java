@@ -1,6 +1,10 @@
 package net.loisusong.android.loisusong.fragment.PostFragments;
 
 import net.loisusong.android.loisusong.service.constant.Constant;
+import net.loisusong.android.loisusong.service.model.PostsDataFacebook;
+
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class PostMessageFragment extends PostFacebookFragment {
 	private static boolean isFirstLaunch = true;
@@ -16,5 +20,13 @@ public class PostMessageFragment extends PostFacebookFragment {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public RealmResults<PostsDataFacebook> initPostsModel() {
+		return getRealm().where(PostsDataFacebook.class)
+				.contains("universalVideoId", "sudiepmucsu")
+				.findAll()
+				.sort("createdTime", Sort.DESCENDING);
 	}
 }

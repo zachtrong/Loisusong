@@ -6,6 +6,10 @@ import android.support.v7.widget.RecyclerView;
 
 import net.loisusong.android.loisusong.adapter.PostsFacebookRecyclerAdapter;
 import net.loisusong.android.loisusong.service.constant.Constant;
+import net.loisusong.android.loisusong.service.model.PostsDataFacebook;
+
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 public abstract class PostFacebookFragment extends PostFragment {
 
@@ -22,8 +26,10 @@ public abstract class PostFacebookFragment extends PostFragment {
 		}
 	}
 
+	public abstract RealmResults<PostsDataFacebook> initPostsModel();
+
 	@Override
-	void setUpData() {
+	void setUpAdapter() {
 		postsFacebookRecyclerAdapter = new PostsFacebookRecyclerAdapter(this);
 	}
 

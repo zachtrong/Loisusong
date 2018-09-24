@@ -22,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public abstract class PostFragment extends Fragment
@@ -77,7 +79,7 @@ public abstract class PostFragment extends Fragment
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		setUpData();
+		setUpAdapter();
 		setUpLayout(view);
 		if (isFirstLaunch()) {
 			setUpFirstLaunch();
@@ -86,7 +88,7 @@ public abstract class PostFragment extends Fragment
 		}
 	}
 
-	abstract void setUpData();
+	abstract void setUpAdapter();
 
 	private void setUpLayout(View view) {
 		ButterKnife.bind(this, view);

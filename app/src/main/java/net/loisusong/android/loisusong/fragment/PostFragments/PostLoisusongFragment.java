@@ -14,8 +14,10 @@ import net.loisusong.android.loisusong.R;
 import net.loisusong.android.loisusong.adapter.PostsLoisusongRecyclerAdapter;
 import net.loisusong.android.loisusong.service.constant.Constant;
 import net.loisusong.android.loisusong.service.interfaces.PostNetworkStatus;
+import net.loisusong.android.loisusong.service.model.PostsModel;
 
 import butterknife.BindView;
+import io.realm.RealmResults;
 import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public abstract class PostLoisusongFragment extends PostFragment
@@ -50,19 +52,10 @@ public abstract class PostLoisusongFragment extends PostFragment
 		}
 	}
 
-	@Nullable
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_posts, container, false);
-	}
+	public abstract RealmResults<PostsModel> initPostsModel();
 
 	@Override
-	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-	}
-
-	@Override
-	protected void setUpData() {
+	protected void setUpAdapter() {
 		postsLoisusongRecyclerAdapter = new PostsLoisusongRecyclerAdapter(this);
 	}
 

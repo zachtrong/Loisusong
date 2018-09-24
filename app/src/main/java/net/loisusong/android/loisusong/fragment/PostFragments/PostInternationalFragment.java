@@ -1,6 +1,10 @@
 package net.loisusong.android.loisusong.fragment.PostFragments;
 
 import net.loisusong.android.loisusong.service.constant.Constant;
+import net.loisusong.android.loisusong.service.model.PostsModel;
+
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class PostInternationalFragment extends PostLoisusongFragment {
 
@@ -18,5 +22,12 @@ public class PostInternationalFragment extends PostLoisusongFragment {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public RealmResults<PostsModel> initPostsModel() {
+		return getRealm().where(PostsModel.class)
+				.findAll()
+				.sort("date", Sort.DESCENDING);
 	}
 }
