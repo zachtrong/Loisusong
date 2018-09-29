@@ -20,8 +20,8 @@ public class PostsLoisusongRecyclerAdapter extends PostsRecyclerAdapter {
 	}
 
 	@Override
-	protected ViewPostHolder onCreateViewPostHolder(View v) {
-		return new ViewLoisusongPostHolder(v);
+	protected ViewPostHolder onCreateViewPostHolder(View v, String typePost) {
+		return new ViewLoisusongPostHolder(v, typePost);
 	}
 
 	@Override

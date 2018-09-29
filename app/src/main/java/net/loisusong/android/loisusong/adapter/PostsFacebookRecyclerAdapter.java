@@ -22,8 +22,8 @@ public class PostsFacebookRecyclerAdapter extends PostsRecyclerAdapter {
 	}
 
 	@Override
-	protected ViewPostHolder onCreateViewPostHolder(View v) {
-		return new ViewFacebookPostHolder(v);
+	protected ViewPostHolder onCreateViewPostHolder(View v, String typePost) {
+		return new ViewFacebookPostHolder(v, typePost);
 	}
 
 	@Override

@@ -157,4 +157,8 @@ public abstract class PostFragment extends Fragment
 	protected void setTypePost(String typePost) {
 		this.typePost = typePost;
 	}
+
+	public String getTypePost() {
+		return typePost;
+	}
 }

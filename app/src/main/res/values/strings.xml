@@ -13,8 +13,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="transition_header_post">transition_header_post</string>
 
-    <!-- facebook -->
     <string name="facebook_app_id">286003588573371</string>
     <string name="fb_login_protocol_scheme">fb286003588573371</string>
 </resources>

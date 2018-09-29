@@ -10,7 +10,7 @@ import net.loisusong.android.loisusong.R;
 import android.text.Html;
 
 public class ViewFacebookPostHolder extends ViewPostHolder {
-	public ViewFacebookPostHolder(View itemView) {
+	public ViewFacebookPostHolder(View itemView, String typePost) {
 		super(itemView);
 	}
 
@@ -24,5 +24,10 @@ public class ViewFacebookPostHolder extends ViewPostHolder {
 
 		titleTextView.setText(Html.fromHtml(postsDataFacebook.videoDescription));
 		dateTextView.setText(postsDataFacebook.updatedTime);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO
 	}
 }

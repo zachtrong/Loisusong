@@ -21,11 +21,13 @@ public abstract class PostsRecyclerAdapter extends RecyclerView.Adapter {
 
 	private Realm realm;
 	private boolean isLoadingView = isLoadingView();
+	private String typePost;
 
 	protected abstract boolean isLoadingView();
 
 	public PostsRecyclerAdapter(PostFragment postFragment) {
 		realm = postFragment.getRealm();
+		typePost = postFragment.getTypePost();
 	}
 
 	public Realm getRealm() {
@@ -39,7 +41,7 @@ public abstract class PostsRecyclerAdapter extends RecyclerView.Adapter {
 		if (viewType == VIEW_POST) {
 			v = LayoutInflater.from(parent.getContext())
 					.inflate(R.layout.item_post, parent, false);
-			return onCreateViewPostHolder(v);
+			return onCreateViewPostHolder(v, typePost);
 		} else if (viewType == VIEW_LOADING) {
 			v = LayoutInflater.from(parent.getContext())
 					.inflate(R.layout.progressbar, parent, false);
@@ -49,7 +51,7 @@ public abstract class PostsRecyclerAdapter extends RecyclerView.Adapter {
 		}
 	}
 
-	protected abstract ViewPostHolder onCreateViewPostHolder(View v);
+	protected abstract ViewPostHolder onCreateViewPostHolder(View v, String typePost);
 
 	@Override
 	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {

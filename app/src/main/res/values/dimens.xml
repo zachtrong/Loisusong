@@ -11,4 +11,5 @@
 
     <dimen name="post_margin">20dp</dimen>
     <dimen name="post_space">16dp</dimen>
+    <dimen name="webpost_space">8dp</dimen>
 </resources>
