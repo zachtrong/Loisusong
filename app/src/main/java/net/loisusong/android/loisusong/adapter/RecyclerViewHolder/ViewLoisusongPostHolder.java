@@ -1,6 +1,9 @@
 package net.loisusong.android.loisusong.adapter.RecyclerViewHolder;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 
@@ -50,6 +53,13 @@ public class ViewLoisusongPostHolder extends ViewPostHolder {
 		intentWrapper.addImg(getBestSizeType(postsModel));
 
 		intent = intentWrapper.getIntent();
-		v.getContext().startActivity(intent);
+		String transition = v.getContext().getString(R.string.transition_header_post);
+		ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+				.makeSceneTransitionAnimation(
+						(AppCompatActivity) v.getContext(),
+						imageView,
+						transition
+				);
+		v.getContext().startActivity(intent, optionsCompat.toBundle());
 	}
 }
