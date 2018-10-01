@@ -1,8 +1,13 @@
 package net.loisusong.android.loisusong.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -124,6 +129,24 @@ public class PostLoisusongActivity extends AppCompatActivity {
 	}
 
 	public class PostWebViewClient extends WebViewClient {
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+				Uri uri = request.getUrl();
+				CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+				builder.setToolbarColor(ContextCompat.getColor(
+						PostLoisusongActivity.this,
+						R.color.colorPrimary
+				));
+				builder.setSecondaryToolbarColor(ContextCompat.getColor(
+						PostLoisusongActivity.this,
+						R.color.colorPrimaryDark
+				));
+				CustomTabsIntent customTabsIntent = builder.build();
+				customTabsIntent.launchUrl(PostLoisusongActivity.this, uri);
+			}
+			return true;
+		}
 	}
 
 	@Override
