@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundGrey"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/ab_post_youtube"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tl_post_youtube"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:liftOnScroll="true"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleTextColor="@android:color/white"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerView
+        android:id="@+id/youtube_view"
+        android:transitionName="@string/transition_header_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:targetApi="lollipop" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_post_youtube"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/lato_regular"
+            android:layout_marginTop="@dimen/webpost_space"
+            android:layout_marginStart="@dimen/webpost_space"
+            android:layout_marginEnd="@dimen/webpost_space"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
+</LinearLayout>

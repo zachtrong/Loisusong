@@ -38,5 +38,10 @@
             android:name=".activity.PostLoisusongActivity"
             android:theme="@style/AppTheme"
             />
+        <activity
+            android:name=".activity.PostYoutubeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 </manifest>
