@@ -2,6 +2,7 @@ package net.loisusong.android.loisusong.fragment.PostFragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 
 import net.loisusong.android.loisusong.R;
 import net.loisusong.android.loisusong.service.interfaces.PostNetworkStatus;
-import net.loisusong.android.loisusong.service.network.NetworkLoisusong;
+import net.loisusong.android.loisusong.service.network.Network;
 import net.loisusong.android.loisusong.service.utils.realm.RealmConfigs;
 import com.orhanobut.hawk.Hawk;
 
@@ -22,13 +23,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
 import io.supercharge.shimmerlayout.ShimmerLayout;
 
 public abstract class PostFragment extends Fragment
 		implements SwipeRefreshLayout.OnRefreshListener,
 		PostNetworkStatus {
+
+	private static final int TIME_RELOADING_ANIMATION = 3000;
 
 	@BindView(R.id.rv)
 	RecyclerView recyclerView;
@@ -39,10 +40,13 @@ public abstract class PostFragment extends Fragment
 
 	protected Realm realm;
 	protected String typePost;
-	protected NetworkLoisusong networkLoisusong;
+	protected Network network;
 	protected LinearLayoutManager layoutManager;
 	protected boolean isLoading = false;
 	protected int pageLoading;
+
+	private Handler handler;
+	private Runnable delayedRemoveLoadingLayout = this::onListenerNetworkPost;
 
 	@Override
 	public void onAttach(Context context) {
@@ -62,13 +66,11 @@ public abstract class PostFragment extends Fragment
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setUpNetwork();
+		network = initNetwork();
+		network.addListener(this);
 	}
 
-	private void setUpNetwork() {
-		networkLoisusong = new NetworkLoisusong(realm);
-		networkLoisusong.addListener(this);
-	}
+	public abstract Network initNetwork();
 
 	@Nullable
 	@Override
@@ -108,7 +110,19 @@ public abstract class PostFragment extends Fragment
 
 	private void setUpFirstLaunch() {
 		shimmerLayout.startShimmerAnimation();
+		setUpDelayedRemoveLoadingLayout();
 		onRefresh();
+	}
+
+	private void setUpDelayedRemoveLoadingLayout() {
+		handler = new Handler();
+		handler.postDelayed(delayedRemoveLoadingLayout, TIME_RELOADING_ANIMATION);
+	}
+
+	private void removeDelayedRemoveLoadingLayout() {
+		if (handler != null && delayedRemoveLoadingLayout != null) {
+			handler.removeCallbacks(delayedRemoveLoadingLayout);
+		}
 	}
 
 	@Override
@@ -116,7 +130,7 @@ public abstract class PostFragment extends Fragment
 		if (!isLoading) {
 			isLoading = true;
 			pageLoading = getLastPageLoaded();
-			networkLoisusong.getNewPosts(typePost);
+			network.getNewPosts(typePost);
 		} else {
 			swipeRefreshLayout.setRefreshing(false);
 		}
@@ -125,6 +139,7 @@ public abstract class PostFragment extends Fragment
 	protected void onListenerNetworkPost() {
 		isLoading = false;
 		swipeRefreshLayout.setRefreshing(false);
+		removeDelayedRemoveLoadingLayout();
 		if (shimmerLayout.getVisibility() != View.GONE) {
 			shimmerLayout.stopShimmerAnimation();
 			shimmerLayout.setVisibility(View.GONE);
@@ -147,7 +162,7 @@ public abstract class PostFragment extends Fragment
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		networkLoisusong.removeListener(this);
+		network.removeListener(this);
 	}
 
 	public Realm getRealm() {

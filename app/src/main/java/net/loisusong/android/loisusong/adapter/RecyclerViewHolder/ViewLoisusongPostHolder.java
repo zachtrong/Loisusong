@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import net.loisusong.android.loisusong.R;
 import net.loisusong.android.loisusong.factory.PostViewFactory;
 import net.loisusong.android.loisusong.service.model.PostsModel;
+import net.loisusong.android.loisusong.service.utils.text.TextModifier;
 import net.loisusong.android.loisusong.service.wrapper.PostIntentWrapper;
 
 import io.realm.RealmObject;
@@ -34,7 +35,7 @@ public class ViewLoisusongPostHolder extends ViewPostHolder {
 				.into(imageView);
 
 		titleTextView.setText(Html.fromHtml(postsModel.title.rendered));
-		dateTextView.setText(postsModel.modified);
+		dateTextView.setText(TextModifier.beautifyDate(postsModel.modified));
 	}
 
 	private String getBestSizeType(PostsModel postsModel) {

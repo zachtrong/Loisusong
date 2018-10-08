@@ -28,6 +28,6 @@ public class PostCoffeeFragment extends PostFacebookFragment {
 			isFirstLaunch = false;
 			return true;
 		}
-		return true;
+		return false;
 	}
 }

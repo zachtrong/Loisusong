@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import net.loisusong.android.loisusong.activity.PostLoisusongActivity;
+import net.loisusong.android.loisusong.activity.PostVideoActivity;
 import net.loisusong.android.loisusong.activity.PostYoutubeActivity;
 import net.loisusong.android.loisusong.service.constant.Constant;
 
@@ -27,9 +28,11 @@ public class PostViewFactory {
 			case Constant.POST_MEDIA:
 				i = new Intent(context, PostYoutubeActivity.class);
 				break;
+			case Constant.POST_COFFEE:
+				i = new Intent(context, PostVideoActivity.class);
+				break;
 			default:
 				i = new Intent(context, PostLoisusongActivity.class);
-				// TODO
 				break;
 		}
 		return i;

@@ -45,13 +45,14 @@ public class CoffeeAndMessageFragment extends BaseFragment
 	}
 
 	private void setUpFragment() {
-		if (AccessToken.getCurrentAccessToken() != null) {
-			setUpViewPager();
-		} else {
+		if (AccessToken.getCurrentAccessToken() == null
+				|| AccessToken.getCurrentAccessToken().isExpired()) {
 			FacebookLoginFragment facebookLoginFragment = new FacebookLoginFragment();
 			facebookLoginFragment.setFacebookLoginListener(this);
 			frameLayout.setVisibility(View.VISIBLE);
 			super.replaceFragment(R.id.fl_coffee_and_message, facebookLoginFragment);
+		} else {
+			setUpViewPager();
 		}
 	}
 

@@ -1,20 +1,17 @@
 package net.loisusong.android.loisusong.fragment.PostFragments;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import net.loisusong.android.loisusong.R;
 import net.loisusong.android.loisusong.adapter.PostsLoisusongRecyclerAdapter;
 import net.loisusong.android.loisusong.service.constant.Constant;
 import net.loisusong.android.loisusong.service.interfaces.PostNetworkStatus;
 import net.loisusong.android.loisusong.service.model.PostsModel;
+import net.loisusong.android.loisusong.service.network.Network;
+import net.loisusong.android.loisusong.service.network.NetworkLoisusong;
 
 import butterknife.BindView;
 import io.realm.RealmResults;
@@ -53,6 +50,11 @@ public abstract class PostLoisusongFragment extends PostFragment
 	}
 
 	public abstract RealmResults<PostsModel> initPostsModel();
+
+	@Override
+	public Network initNetwork() {
+		return new NetworkLoisusong(realm);
+	}
 
 	@Override
 	protected void setUpAdapter() {
@@ -122,7 +124,7 @@ public abstract class PostLoisusongFragment extends PostFragment
 				} else {
 					isLoading = true;
 					pageLoading = lastPage + 1;
-					networkLoisusong.getPosts(typePost, pageLoading);
+					((NetworkLoisusong) network).getPosts(typePost, pageLoading);
 				}
 			}
 		}

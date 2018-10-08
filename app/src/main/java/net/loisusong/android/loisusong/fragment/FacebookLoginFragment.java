@@ -1,5 +1,6 @@
 package net.loisusong.android.loisusong.fragment;
 
+import android.content.Intent;
 import android.media.FaceDetector;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,12 +58,7 @@ public class FacebookLoginFragment extends Fragment {
 		setUpFacebook();
 		updateFacebookLoginUI();
 
-		fancyButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				handleFacebookLogin();
-			}
-		});
+		fancyButton.setOnClickListener(v -> handleFacebookLogin());
 	}
 
 	private void setUpFacebook() {
@@ -98,10 +94,11 @@ public class FacebookLoginFragment extends Fragment {
 	}
 
 	private void updateFacebookLoginUI() {
-		if (AccessToken.getCurrentAccessToken() != null) {
-			fancyButton.setText("Logout");
-		} else {
+		if (AccessToken.getCurrentAccessToken() == null
+				|| AccessToken.getCurrentAccessToken().isExpired()) {
 			fancyButton.setText("Facebook Connect");
+		} else {
+			fancyButton.setText("Logout");
 		}
 	}
 
@@ -112,5 +109,12 @@ public class FacebookLoginFragment extends Fragment {
 			accessTokenTracker.startTracking();
 			loginManager.logInWithReadPermissions(this, permissions);
 		}
+	}
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		callbackManager.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

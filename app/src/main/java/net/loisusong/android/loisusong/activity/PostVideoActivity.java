@@ -6,13 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import net.loisusong.android.loisusong.R;
 
-public class SplashActivity extends AppCompatActivity {
-
+public class PostVideoActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		MainActivity.open(this);
-		finish();
+		setContentView(R.layout.activity_video_loisusong);
 	}
 }

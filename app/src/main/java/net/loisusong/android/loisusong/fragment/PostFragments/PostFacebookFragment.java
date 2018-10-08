@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import net.loisusong.android.loisusong.adapter.PostsFacebookRecyclerAdapter;
 import net.loisusong.android.loisusong.service.constant.Constant;
 import net.loisusong.android.loisusong.service.model.PostsDataFacebook;
+import net.loisusong.android.loisusong.service.model.PostsModelFacebook;
+import net.loisusong.android.loisusong.service.network.Network;
+import net.loisusong.android.loisusong.service.network.NetworkFacebook;
 
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -27,6 +30,11 @@ public abstract class PostFacebookFragment extends PostFragment {
 	}
 
 	public abstract RealmResults<PostsDataFacebook> initPostsModel();
+
+	@Override
+	public Network initNetwork() {
+		return new NetworkFacebook(realm);
+	}
 
 	@Override
 	void setUpAdapter() {
@@ -55,21 +63,24 @@ public abstract class PostFacebookFragment extends PostFragment {
 
 	@Override
 	public void onNewPosts() {
-
+		postsFacebookRecyclerAdapter.notifyDataSetChanged();
+		postsFacebookRecyclerAdapter.recoverLoadingView();
+		postsFacebookRecyclerAdapter.removeLoadingView();
+		onListenerNetworkPost();
 	}
 
 	@Override
 	public void onPosts() {
-
+		onListenerNetworkPost();
 	}
 
 	@Override
 	public void onEmpty() {
-
+		onListenerNetworkPost();
 	}
 
 	@Override
 	public void onError() {
-
+		onListenerNetworkPost();
 	}
 }

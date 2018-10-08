@@ -25,6 +25,6 @@ public class NetworkFacebook extends Network {
 	public void getNewPosts(String typePost) {
 		postFacebookApi.getFacebookVideos(Constant.LOI_SU_SONG_NET_PAGE_ID,
 				AccessToken.getCurrentAccessToken().getToken())
-				.enqueue(new NetworkGetNewCallback(this));
+				.enqueue(new NetworkFacebookGetCallback(this));
 	}
 }

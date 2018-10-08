@@ -9,6 +9,7 @@ import net.loisusong.android.loisusong.fragment.PostFragments.PostFragment;
 import net.loisusong.android.loisusong.fragment.PostFragments.PostLoisusongFragment;
 import net.loisusong.android.loisusong.service.model.PostsDataFacebook;
 import net.loisusong.android.loisusong.service.model.PostsModel;
+import net.loisusong.android.loisusong.service.model.PostsModelFacebook;
 
 import io.realm.RealmObject;
 import io.realm.RealmResults;

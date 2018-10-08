@@ -37,6 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="start"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:fontFamily="@font/lato_bold"
         android:text="Lorem ipsum dolor sit amet"
         android:layout_marginTop="@dimen/post_space"

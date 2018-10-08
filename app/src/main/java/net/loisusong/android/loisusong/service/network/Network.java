@@ -68,4 +68,6 @@ public abstract class Network {
 			listeners.remove(listener);
 		}
 	}
+
+	public abstract void getNewPosts(String typePost);
 }
