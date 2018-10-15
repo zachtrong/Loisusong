@@ -1,9 +1,7 @@
 package net.loisusong.android.loisusong.activity;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
@@ -66,7 +64,7 @@ public class PostLoisusongActivity extends AppCompatActivity {
 		PostIntentWrapper intentWrapper = new PostIntentWrapper(intent);
 		title = intentWrapper.getTitle();
 		date = intentWrapper.getDate();
-		img = intentWrapper.getImg();
+		img = intentWrapper.getUrl();
 		content = intentWrapper.getContent();
 	}
 

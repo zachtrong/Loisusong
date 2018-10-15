@@ -45,7 +45,7 @@ public class ViewFacebookPostHolder extends ViewPostHolder {
 		intentWrapper.addTitle(postsDataFacebook.videoDescription);
 		intentWrapper.addDate(postsDataFacebook.updatedTime);
 		intentWrapper.addContent(postsDataFacebook.videoDescription);
-		intentWrapper.addImg(postsDataFacebook.format.last().url);
+		intentWrapper.addUrl(postsDataFacebook.sourceUrl);
 
 		intent = intentWrapper.getIntent();
 		String transition = v.getContext().getString(R.string.transition_header_post);

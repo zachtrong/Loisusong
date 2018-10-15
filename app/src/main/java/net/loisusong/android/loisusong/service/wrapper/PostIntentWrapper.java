@@ -27,7 +27,7 @@ public class PostIntentWrapper {
 		intent.putExtra(CONTENT, content);
 	}
 
-	public void addImg(String img) {
+	public void addUrl(String img) {
 		intent.putExtra(IMG, img);
 	}
 
@@ -43,7 +43,7 @@ public class PostIntentWrapper {
 		return intent.getExtras().getString(CONTENT, "");
 	}
 
-	public String getImg() {
+	public String getUrl() {
 		return intent.getExtras().getString(IMG, "");
 	}
 
