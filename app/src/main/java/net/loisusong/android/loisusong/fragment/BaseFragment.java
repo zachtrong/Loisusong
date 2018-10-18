@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import net.loisusong.android.loisusong.R;
 import net.loisusong.android.loisusong.activity.MainActivity;
 import net.loisusong.android.loisusong.fragment.PostFragments.PostLoisusongFragment;
 
@@ -33,6 +34,7 @@ public class BaseFragment extends Fragment {
 
 	protected void setUpToolbar(@NonNull Toolbar toolbar) {
 		getMainActivity().setSupportActionBar(toolbar);
+		getMainActivity().getSupportActionBar().setLogo(R.drawable.ic_lss_white);
 		mToggle = getMainActivity().registerDrawerToggle(toolbar);
 	}
 

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -66,17 +67,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		return true;
 	}
 
-	boolean isActionSettingItem(MenuItem item) {
-		int id = item.getItemId();
-		return id == R.id.action_settings;
-	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (isActionSettingItem(item)) {
-			return true;
+		int id = item.getItemId();
+		switch (id) {
+			case R.id.action_bar_right:
+				onHandleDrawerLayout();
+				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void onHandleDrawerLayout() {
+		if (drawerLayout.isDrawerOpen(Gravity.END)) {
+			drawerLayout.closeDrawer(Gravity.END);
+		} else {
+			drawerLayout.openDrawer(Gravity.END);
+		}
 	}
 
 	private Fragment getFragmentFromMenuItem(@NonNull MenuItem item) {
@@ -134,11 +142,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				this,
 				drawerLayout,
 				toolbar,
-				R.string.navigation_drawer_close,
+				R.string.navigation_drawer_open,
 				R.string.navigation_drawer_close
 		);
 		drawerLayout.addDrawerListener(toggle);
 		toggle.syncState();
+		toggle.setDrawerIndicatorEnabled(false);
+		toolbar.setNavigationOnClickListener(v -> onHandleDrawerLayout());
 		return toggle;
 	}
 
