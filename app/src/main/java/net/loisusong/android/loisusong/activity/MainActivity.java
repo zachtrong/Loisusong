@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 			startFragmentDelayed(fragment);
 		}
 		closeDrawer();
-		return false;
+		return true;
 	}
 
 	private void startFragmentInstant(Fragment fragment) {
