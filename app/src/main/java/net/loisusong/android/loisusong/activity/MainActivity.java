@@ -16,7 +16,7 @@ import android.view.MenuItem;
 
 import net.loisusong.android.loisusong.R;
 import net.loisusong.android.loisusong.fragment.AboutFragment;
-import net.loisusong.android.loisusong.fragment.CoffeeAndMessageFragment;
+import net.loisusong.android.loisusong.fragment.CoffeeFragment;
 import net.loisusong.android.loisusong.fragment.HomeFragment;
 import net.loisusong.android.loisusong.fragment.LibraryFragment;
 
@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 			case R.id.nav_lib:
 				return new LibraryFragment();
 			case R.id.nav_cafe:
-				return new CoffeeAndMessageFragment();
+				return new CoffeeFragment();
 			case R.id.nav_about:
 				return new AboutFragment();
 			default:

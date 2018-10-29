@@ -2,12 +2,13 @@ package net.loisusong.android.loisusong.fragment.PostFragments;
 
 import net.loisusong.android.loisusong.service.constant.Constant;
 import net.loisusong.android.loisusong.service.model.PostsDataFacebook;
+import net.loisusong.android.loisusong.service.model.PostsModel;
 
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class PostCoffeeFragment extends PostFacebookFragment {
+public class PostCoffeeFragment extends PostLoisusongFragment {
 	private static boolean isFirstLaunch = true;
 	@Override
 	void initTypePost() {
@@ -15,11 +16,10 @@ public class PostCoffeeFragment extends PostFacebookFragment {
 	}
 
 	@Override
-	public RealmResults<PostsDataFacebook> initPostsModel() {
-		return getRealm().where(PostsDataFacebook.class)
-				.contains("universalVideoId", "cafetoi")
+	public RealmResults<PostsModel> initPostsModel() {
+		return getRealm().where(PostsModel.class)
 				.findAll()
-				.sort("createdTime", Sort.DESCENDING);
+				.sort("date", Sort.DESCENDING);
 	}
 
 	@Override

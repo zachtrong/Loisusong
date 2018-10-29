@@ -34,6 +34,7 @@ public class Constant {
 	public static final String CATEGORY_NEWS_INTERNATIONAL_2 = "39";
 	public static final String CATEGORY_NEWS_INTERNATIONAL_3 = "263";
 	public static final String CATEGORY_NEWS_INTERNATIONAL_4 = "269";
+	public static final String CATEGORY_NIGHT_COFFEE = "1299";
 
 	public static final String TAG_MOBILE_NEWS = "1214";
 	public static final String TAG_MOBILE_MEDIA = "1212";

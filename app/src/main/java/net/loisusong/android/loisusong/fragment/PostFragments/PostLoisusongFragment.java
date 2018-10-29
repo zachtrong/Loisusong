@@ -44,6 +44,8 @@ public abstract class PostLoisusongFragment extends PostFragment
 				return new PostMediaFragment();
 			case Constant.POST_ABOUT_US:
 				return new PostAboutFragment();
+			case Constant.POST_COFFEE:
+				return new PostCoffeeFragment();
 			default:
 				throw new Error("No Such Fragment");
 		}
@@ -113,7 +115,8 @@ public abstract class PostLoisusongFragment extends PostFragment
 		}
 
 		private boolean isScrolledLastPost() {
-			return layoutManager.findLastVisibleItemPosition() + 1 == postsLoisusongRecyclerAdapter.getItemCount();
+			return layoutManager.findLastVisibleItemPosition() + 1
+					== postsLoisusongRecyclerAdapter.getItemCount();
 		}
 
 		private void onRequestMorePosts() {

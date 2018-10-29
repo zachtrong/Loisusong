@@ -10,6 +10,7 @@ import android.view.View;
 
 import net.loisusong.android.loisusong.R;
 import net.loisusong.android.loisusong.activity.MainActivity;
+import net.loisusong.android.loisusong.activity.PostLoisusongActivity;
 import net.loisusong.android.loisusong.fragment.PostFragments.PostLoisusongFragment;
 
 import butterknife.ButterKnife;
@@ -47,9 +48,7 @@ public class BaseFragment extends Fragment {
 	}
 
 	protected void replacePostFragment(int id, String fragmentId) {
-		getChildFragmentManager().beginTransaction()
-				.replace(id, PostLoisusongFragment.newInstance(fragmentId))
-				.commit();
+		replaceFragment(id, PostLoisusongFragment.newInstance(fragmentId));
 	}
 
 	protected void replaceFragment(int id, Fragment fragment) {
