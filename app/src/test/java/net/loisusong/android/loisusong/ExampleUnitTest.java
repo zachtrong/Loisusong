@@ -1,4 +1,4 @@
-package net.loisusong.android.loisusong;
+package net.loisusong.loisusong;
 
 import org.junit.Test;
 

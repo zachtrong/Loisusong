@@ -1,4 +1,4 @@
-package net.loisusong.android.loisusong;
+package net.loisusong.loisusong;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
