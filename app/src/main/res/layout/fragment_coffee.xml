@@ -15,9 +15,23 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/tb_coffee"
-            app:title="@string/app_cafe"
+            android:paddingStart="0dp"
+            android:paddingEnd="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content">
+            <TextView
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/app_coffee"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="@dimen/title_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
+    <FrameLayout
+        android:id="@+id/fl_coffee"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>
