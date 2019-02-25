@@ -1,8 +1,8 @@
 package net.loisusong.loisusong.adapter.RecyclerViewHolder;
 
 import android.content.Intent;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 

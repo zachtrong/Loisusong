@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +20,7 @@ import net.loisusong.loisusong.fragment.CoffeeFragment;
 import net.loisusong.loisusong.fragment.HomeFragment;
 import net.loisusong.loisusong.fragment.LibraryFragment;
 
+import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -32,7 +33,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	@BindView(R.id.nv_main)
 	NavigationView navigationView;
 
-	android.support.v4.app.FragmentManager fragmentManager;
+	FragmentManager fragmentManager;
 	private boolean isFirstStart = true;
 
 	public static void open(Context context) {

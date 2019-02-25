@@ -1,9 +1,9 @@
 package net.loisusong.loisusong.fragment.PostFragments;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.loisusong.loisusong.R;
 import net.loisusong.loisusong.adapter.PostsLoisusongRecyclerAdapter;
