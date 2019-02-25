@@ -1,6 +1,8 @@
 package net.loisusong.loisusong.activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,10 +11,13 @@ import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerView;
+import com.pierfrancescosoffritti.youtubeplayer.ui.PlayerUIController;
 
 import net.loisusong.loisusong.R;
 import net.loisusong.loisusong.service.utils.screen.FullScreenManager;
@@ -33,6 +38,8 @@ public class PostYoutubeActivity extends AppCompatActivity {
 	TextView contentView;
 	@BindView(R.id.youtube_view)
 	YouTubePlayerView youTubePlayerView;
+	@BindView(R.id.bt_list_video)
+	MaterialButton listVideoButton;
 
 	private String content;
 	private String title;
@@ -80,6 +87,9 @@ public class PostYoutubeActivity extends AppCompatActivity {
 	private void setUpData() {
 		getSupportActionBar().setTitle(title);
 		videos = getYoutubeUrlLists(content);
+		if (videos.size() > 1) {
+			listVideoButton.setVisibility(View.VISIBLE);
+		}
 		content = removeAbundance(content);
 		contentView.setText(Html.fromHtml(content));
 	}
@@ -115,21 +125,24 @@ public class PostYoutubeActivity extends AppCompatActivity {
 			this.youTubePlayer = youTubePlayer;
 			youTubePlayer.addListener(playerListener);
 
-			youTubePlayerView.addFullScreenListener(new YouTubePlayerFullScreenListener() {
-				@Override
-				public void onYouTubePlayerEnterFullScreen() {
-					fullScreenManager.enterFullScreen();
-				}
-
-				@Override
-				public void onYouTubePlayerExitFullScreen() {
-					fullScreenManager.exitFullScreen();
-					youTubePlayerView.getPlayerUIController().showCustomAction1(false);
-				}
-			});
+			setUpFullScreen();
 		}, true);
 
 		youTubePlayerView.getPlayerUIController().showMenuButton(false);
+	}
+
+	private void setUpFullScreen() {
+		youTubePlayerView.addFullScreenListener(new YouTubePlayerFullScreenListener() {
+			@Override
+			public void onYouTubePlayerEnterFullScreen() {
+				fullScreenManager.enterFullScreen();
+			}
+
+			@Override
+			public void onYouTubePlayerExitFullScreen() {
+				fullScreenManager.exitFullScreen();
+			}
+		});
 	}
 
 	@Override

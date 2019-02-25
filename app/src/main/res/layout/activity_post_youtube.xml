@@ -31,6 +31,17 @@
         android:layout_height="wrap_content"
         tools:targetApi="lollipop" />
 
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_list_video"
+        android:layout_gravity="center"
+        android:text="@string/button_list_video_of_library"
+        android:visibility="gone"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

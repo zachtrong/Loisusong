@@ -17,4 +17,6 @@
 
     <string name="facebook_app_id">286003588573371</string>
     <string name="fb_login_protocol_scheme">fb286003588573371</string>
+
+    <string name="button_list_video_of_library">Danh sách bài giảng</string>
 </resources>
