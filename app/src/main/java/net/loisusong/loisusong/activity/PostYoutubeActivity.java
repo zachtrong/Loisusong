@@ -1,8 +1,6 @@
 package net.loisusong.loisusong.activity;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,15 +9,15 @@ import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerView;
-import com.pierfrancescosoffritti.youtubeplayer.ui.PlayerUIController;
 
 import net.loisusong.loisusong.R;
+import net.loisusong.loisusong.fragment.PostFragments.YouTubeFragment.YouTubeBottomDialogFragment;
+import net.loisusong.loisusong.service.interfaces.BottomSheetItemListener;
 import net.loisusong.loisusong.service.utils.screen.FullScreenManager;
 import net.loisusong.loisusong.service.utils.youtube.LoisusongYouTubePlayerListener;
 import net.loisusong.loisusong.service.wrapper.PostIntentWrapper;
@@ -31,7 +29,9 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PostYoutubeActivity extends AppCompatActivity {
+public class PostYoutubeActivity extends AppCompatActivity implements BottomSheetItemListener {
+	public static final String YOU_TUBE_BOTTOM_DIALOG_TAG = "YOU_TUBE_BOTTOM_DIALOG_TAG";
+
 	@BindView(R.id.tl_post_youtube)
 	Toolbar toolbar;
 	@BindView(R.id.tv_post_youtube)
@@ -46,6 +46,7 @@ public class PostYoutubeActivity extends AppCompatActivity {
 	private ArrayList<String> videos;
 	private YouTubePlayer youTubePlayer;
 	private FullScreenManager fullScreenManager;
+	private YouTubeBottomDialogFragment youTubeBottomDialogFragment;
 
 	LoisusongYouTubePlayerListener playerListener = new LoisusongYouTubePlayerListener() {
 		@Override
@@ -89,6 +90,11 @@ public class PostYoutubeActivity extends AppCompatActivity {
 		videos = getYoutubeUrlLists(content);
 		if (videos.size() > 1) {
 			listVideoButton.setVisibility(View.VISIBLE);
+
+			setUpBottomDialog();
+			listVideoButton.setOnClickListener(v -> {
+				youTubeBottomDialogFragment.show(getSupportFragmentManager(), YOU_TUBE_BOTTOM_DIALOG_TAG);
+			});
 		}
 		content = removeAbundance(content);
 		contentView.setText(Html.fromHtml(content));
@@ -104,6 +110,13 @@ public class PostYoutubeActivity extends AppCompatActivity {
 		}
 		return videos;
 	}
+
+	private void setUpBottomDialog() {
+		youTubeBottomDialogFragment =
+				YouTubeBottomDialogFragment.newInstance(videos);
+		youTubeBottomDialogFragment.addOnItemClickListener(this);
+	}
+
 
 	private String removeAbundance(String content) {
 		content = content.replaceAll("<[^>]*>", "");
@@ -160,5 +173,11 @@ public class PostYoutubeActivity extends AppCompatActivity {
 	protected void onDestroy() {
 		youTubePlayerView.release();
 		super.onDestroy();
+	}
+
+	@Override
+	public void onBottomSheetItemClick(String videoId) {
+		youTubeBottomDialogFragment.dismiss();
+		youTubePlayer.cueVideo(videoId, 0);
 	}
 }

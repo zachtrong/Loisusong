@@ -39,6 +39,7 @@
         android:text="@string/button_list_video_of_library"
         android:visibility="gone"
         style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_marginTop="@dimen/webpost_space"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

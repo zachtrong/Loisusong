@@ -11,6 +11,7 @@
     <color name="background">#f0f0f0</color><!--#3d3d3d</color>-->
     <color name="backgroundGrey">#3d3d3d</color>
     <color name="transparent">#00000000</color>
+    <color name="md_bottom_sheet_title_color">#444444</color>
 
     <color name="placeHolderBG">#dddddd</color>
     <color name="date">#949494</color>
