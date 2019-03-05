@@ -39,7 +39,7 @@
         android:layout_gravity="start"
         android:maxLines="3"
         android:ellipsize="end"
-        android:fontFamily="@font/lato_bold"
+        android:fontFamily="@font/roboto_bold"
         android:text="Lorem ipsum dolor sit amet"
         android:layout_marginTop="@dimen/post_space"
         app:layout_constraintTop_toBottomOf="@id/cv_item"

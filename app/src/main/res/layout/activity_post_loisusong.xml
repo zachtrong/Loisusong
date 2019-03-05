@@ -47,7 +47,7 @@
             <TextView
                 android:textColor="@color/textColorDark"
                 android:textSize="20sp"
-                android:fontFamily="@font/lato_bold"
+                android:fontFamily="@font/roboto_bold"
                 android:id="@+id/tv_title"
                 android:layout_marginTop="@dimen/webpost_space"
                 android:layout_marginStart="@dimen/webpost_space"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/tv_date"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:textColor="@color/date"
                 android:fontFamily="@font/lato_regular"
                 android:layout_marginTop="@dimen/webpost_space"
@@ -75,7 +75,7 @@
             <WebView
                 android:id="@+id/wv_post_loisusong"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingTop="@dimen/post_margin"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.loisusong.loisusong.R;
+import net.loisusong.loisusong.service.utils.LogUtils;
 import net.loisusong.loisusong.service.wrapper.PostIntentWrapper;
 
 import butterknife.BindView;
@@ -38,7 +39,6 @@ public class PostLoisusongActivity extends AppCompatActivity {
 	@BindView(R.id.wv_post_loisusong)
 	WebView webView;
 
-	private WebSettings webSettings;
 	private String title, date, img, content;
 
 	@Override
@@ -112,7 +112,7 @@ public class PostLoisusongActivity extends AppCompatActivity {
 	}
 
 	private void setUpWebView() {
-		webSettings = webView.getSettings();
+		WebSettings webSettings = webView.getSettings();
 		webSettings.setDefaultTextEncodingName("utf-8");
 		webSettings.setAppCacheEnabled(false);
 		webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
