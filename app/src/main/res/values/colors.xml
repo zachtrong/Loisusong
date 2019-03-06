@@ -6,7 +6,7 @@
     <color name="colorControlNormal">#FFFFFF</color>
     <color name="backgroundLight">#f0f0f0</color> <!--#262626</color>-->
     <color name="backgroundDark">#262626</color>
-    <color name="textColorDark">#212121</color>
+    <color name="textColorDark">#313131</color>
     <color name="imgHolder">#CCCCCC</color>
     <color name="background">#f0f0f0</color><!--#3d3d3d</color>-->
     <color name="backgroundGrey">#3d3d3d</color>
