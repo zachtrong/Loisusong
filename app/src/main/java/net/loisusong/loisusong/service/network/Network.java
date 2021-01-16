@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmList;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public abstract class Network {
 	protected Gson gson;
@@ -26,7 +27,9 @@ public abstract class Network {
 				.registerTypeAdapter(new TypeToken<RealmList<RealmInt>>() {}.getType(),
 						RealmIntListTypeAdapter.INSTANCE)
 				.create();
-		httpClientBuilder = new OkHttpClient.Builder();
+		HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+		loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+		httpClientBuilder = new OkHttpClient.Builder().addInterceptor(loggingInterceptor);
 	}
 
 	public Realm getRealm() {
